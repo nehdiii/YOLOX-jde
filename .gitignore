@@ -145,13 +145,24 @@ error_log.txt
 
 
 
-# pretrained / checkpoints
+# pretrained weights
+pretrained/*.pth.tar
+# or only this exact file
+pretrained/ocsort_x_mot20.pth.tar
+
+datasets/*
 pretrained/
 *.pth
 *.pth.tar
-*.pt
-*.ckpt
-
-# outputs / datasets
-YOLOX_outputs/
-datasets/
+datasets/mix_mot20_ch/annotations/train.json
+datasets/mix_mot20_ch/annotations/val_half.json
+pretrained/
+*.pth
+*.pth.tar
+datasets/MOT20
+datasets/crowdhuman
+datasets/mix_mot20_ch/crowdhuman_train
+datasets/mix_mot20_ch/crowdhuman_val
+datasets/mix_mot20_ch/mot20_train
+datasets/mix_mot20_ch/annotations/train.json
+datasets/mix_mot20_ch/annotations/val_half.json
