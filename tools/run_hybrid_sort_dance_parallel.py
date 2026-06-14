@@ -17,6 +17,7 @@ Example:
 """
 
 from loguru import logger
+from tqdm import tqdm
 
 import argparse
 import math
@@ -25,6 +26,9 @@ import random
 import subprocess
 import sys
 import warnings
+import time
+import json
+import contextlib
 from pathlib import Path
 
 import torch
@@ -87,6 +91,12 @@ def build_parser():
         help=argparse.SUPPRESS,
     )
     parser.add_argument(
+        "--parallel-worker-progress-file",
+        type=str,
+        default=None,
+        help=argparse.SUPPRESS,
+    )
+    parser.add_argument(
         "--skip-trackeval",
         action="store_true",
         help=argparse.SUPPRESS,
@@ -100,6 +110,31 @@ def build_parser():
         "--dry-run-seqs",
         action="store_true",
         help="Only print the sequence split and exit.",
+    )
+
+    parser.add_argument(
+        "--parallel-progress-interval",
+        type=float,
+        default=2.0,
+        help="Seconds between parent progress-bar refreshes while workers run.",
+    )
+    parser.add_argument(
+        "--parallel-progress-mode",
+        type=str,
+        default="frames",
+        choices=["frames", "seqs"],
+        help="Parent progress bar mode. 'frames' shows global processed frames like the original tqdm; 'seqs' shows completed sequences.",
+    )
+    parser.add_argument(
+        "--parallel-worker-log-dir",
+        type=str,
+        default=None,
+        help="Optional folder for per-worker stdout/stderr logs. Defaults to YOLOX_outputs/<expn>/parallel_worker_logs.",
+    )
+    parser.add_argument(
+        "--parallel-clean-results",
+        action="store_true",
+        help="Delete old result .txt files for the target sequences before launching workers. Useful when reusing the same --expn.",
     )
 
     parser.add_argument(
@@ -188,6 +223,136 @@ def parse_gpu_list(args):
     count = torch.cuda.device_count()
     return [str(i) for i in range(count)] if count > 0 else [""]
 
+
+def build_eval_loader_quiet(exp, args):
+    """Build the eval loader while hiding noisy dataset/coco indexing logs.
+
+    This only affects the parent process. Workers still write full details to
+    their worker_XX.log files.
+    """
+    disabled_names = [
+        "yolox.data.datasets.mot",
+        "pycocotools.coco",
+    ]
+    for name in disabled_names:
+        try:
+            logger.disable(name)
+        except Exception:
+            pass
+    try:
+        with open(os.devnull, "w") as devnull:
+            with contextlib.redirect_stdout(devnull), contextlib.redirect_stderr(devnull):
+                return exp.get_eval_loader(args.batch_size, False, args.test, run_tracking=True)
+    finally:
+        for name in disabled_names:
+            try:
+                logger.enable(name)
+            except Exception:
+                pass
+
+
+
+
+def atomic_write_json(path, payload):
+    """Write a small JSON file atomically so the parent never reads half-written data."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    with open(tmp, "w") as f:
+        json.dump(payload, f)
+    os.replace(tmp, path)
+
+
+class WorkerFrameProgress:
+    """Small tqdm replacement used inside each worker.
+
+    The evaluator still calls progress_bar(self.dataloader) exactly as before.
+    Instead of printing a tqdm bar from every worker, this wrapper updates one
+    JSON file. The parent sums all JSON files and prints one clean global
+    frame-level progress bar.
+    """
+
+    def __init__(self, iterable, progress_file, rank=0, total=None, update_every=1):
+        self.iterable = iterable
+        self.progress_file = progress_file
+        self.rank = rank
+        self.total = int(total if total is not None else len(iterable))
+        self.update_every = max(1, int(update_every))
+        self.current = 0
+        self._write(status="running")
+
+    def __iter__(self):
+        try:
+            for item in self.iterable:
+                yield item
+                self.current += 1
+                if self.current % self.update_every == 0 or self.current >= self.total:
+                    self._write(status="running")
+        finally:
+            # If the worker exits normally, the evaluator will usually reach total.
+            # If it crashes, this file still shows the last completed frame.
+            self._write(status="finished_iter", current=self.current)
+
+    def __len__(self):
+        return self.total
+
+    def _write(self, status="running", current=None):
+        atomic_write_json(
+            self.progress_file,
+            {
+                "rank": self.rank,
+                "current": int(self.current if current is None else current),
+                "total": int(self.total),
+                "status": status,
+                "updated_at": time.time(),
+            },
+        )
+
+
+def patch_worker_tqdm_for_frame_progress(args, total_frames, progress_file):
+    """Patch the evaluator module-level tqdm symbol for this worker only."""
+    try:
+        import yolox.evaluators.mot_evaluator_dance as mot_eval_dance
+    except Exception as exc:
+        logger.warning(f"Could not patch evaluator tqdm for frame progress: {exc}")
+        return
+
+    def quiet_progress(iterable, *a, **kw):
+        return WorkerFrameProgress(
+            iterable,
+            progress_file=progress_file,
+            rank=int(args.parallel_worker_rank or 0),
+            total=total_frames,
+            update_every=1,
+        )
+
+    mot_eval_dance.tqdm = quiet_progress
+
+
+def read_worker_progress(progress_files):
+    """Return summed current/total across worker JSON progress files."""
+    current = 0
+    total = 0
+    seen = 0
+    stale = 0
+    now = time.time()
+    for path in progress_files:
+        path = Path(path)
+        if not path.exists():
+            continue
+        try:
+            with open(path, "r") as f:
+                data = json.load(f)
+            cur = int(data.get("current", 0))
+            tot = int(data.get("total", 0))
+            current += max(0, min(cur, tot))
+            total += max(0, tot)
+            seen += 1
+            if now - float(data.get("updated_at", 0)) > 60:
+                stale += 1
+        except Exception:
+            continue
+    return current, total, seen, stale
 
 def run_trackeval(exp, args, results_folder):
     if args.test:
@@ -284,6 +449,12 @@ def run_worker(exp, args):
     kept_frames = filter_loader_to_sequences(val_loader, keep_sequences)
     logger.info(f"Worker {args.parallel_worker_rank}: kept {kept_frames} frames.")
 
+    # Parent-visible frame progress. This suppresses per-worker tqdm and lets the
+    # parent display one global bar: processed_frames / total_frames.
+    progress_file = getattr(args, "parallel_worker_progress_file", None)
+    if progress_file:
+        patch_worker_tqdm_for_frame_progress(args, total_frames=len(val_loader), progress_file=progress_file)
+
     evaluator = MOTEvaluator(
         args=args,
         dataloader=val_loader,
@@ -334,34 +505,86 @@ def run_worker(exp, args):
 
 
 def run_parent(exp, args, original_argv):
+    """Launch sequence-level workers with clean terminal output.
+
+    Workers still run the same evaluator/tracker code, but their noisy stdout/stderr
+    including tqdm bars and repeated args/model logs are redirected into separate
+    log files. The parent terminal shows one compact sequence progress bar.
+    """
     file_name = os.path.join(exp.output_dir, args.expn)
     os.makedirs(file_name, exist_ok=True)
     setup_logger(file_name, distributed_rank=0, filename="val_log_parallel_parent.txt", mode="a")
 
-    val_loader = exp.get_eval_loader(args.batch_size, False, args.test, run_tracking=True)
+    val_loader = build_eval_loader_quiet(exp, args)
     seqs = sequence_names_from_loader(val_loader)
     chunks = split_contiguous(seqs, args.parallel_workers)
 
-    logger.info(f"Found {len(seqs)} sequences. Starting {len(chunks)} parallel workers.")
-    for i, chunk in enumerate(chunks):
-        logger.info(f"Worker {i}: {chunk}")
-
-    if args.dry_run_seqs:
-        return 0
-
     results_folder = get_results_folder(exp, args)
     os.makedirs(results_folder, exist_ok=True)
+
+    log_dir = args.parallel_worker_log_dir
+    if log_dir is None:
+        log_dir = os.path.join(file_name, "parallel_worker_logs")
+    os.makedirs(log_dir, exist_ok=True)
+
+    logger.info("=" * 80)
+    logger.info("Sequence-parallel HybridSORT evaluation")
+    logger.info(f"Experiment: {args.expn}")
+    logger.info(f"Sequences: {len(seqs)} | Workers: {len(chunks)}")
+    logger.info(f"Results folder: {results_folder}")
+    logger.info(f"Worker logs: {log_dir}")
+    logger.info("=" * 80)
+
+    for i, chunk in enumerate(chunks):
+        first = chunk[0] if chunk else "-"
+        last = chunk[-1] if chunk else "-"
+        logger.info(f"Worker {i:02d}: {len(chunk):3d} seqs | {first} -> {last}")
+
+    if args.dry_run_seqs:
+        logger.info("Dry run only. No worker launched.")
+        return 0
+
+    expected_txt = {f"{seq}.txt" for seq in seqs}
+
+    if args.parallel_clean_results:
+        removed = 0
+        for txt_name in expected_txt:
+            p = Path(results_folder) / txt_name
+            if p.exists():
+                try:
+                    p.unlink()
+                    removed += 1
+                except OSError as exc:
+                    logger.warning(f"Could not remove old result file {p}: {exc}")
+        logger.info(f"Removed {removed} old result files before launch.")
+
+    # Progress must ignore old .txt files from previous runs.
+    # We only count result files modified after this timestamp.
+    progress_start_time = time.time()
 
     gpus = parse_gpu_list(args)
     logger.info(f"GPU assignment list: {gpus}")
 
     procs = []
+    log_files = []
+    finished = set()
     script = str(Path(__file__).resolve())
+
     for rank, chunk in enumerate(chunks):
         gpu = gpus[rank % len(gpus)]
         env = os.environ.copy()
         if gpu != "":
             env["CUDA_VISIBLE_DEVICES"] = gpu
+
+        worker_log = os.path.join(log_dir, f"worker_{rank:02d}.log")
+        worker_progress = os.path.join(log_dir, f"worker_{rank:02d}_progress.json")
+        # Remove stale progress from older runs so frame progress starts at 0.
+        try:
+            Path(worker_progress).unlink()
+        except FileNotFoundError:
+            pass
+        log_fh = open(worker_log, "w", buffering=1)
+        log_files.append(log_fh)
 
         cmd = [
             sys.executable,
@@ -370,29 +593,158 @@ def run_parent(exp, args, original_argv):
             "--parallel-worker-rank", str(rank),
             "--parallel-worker-world", str(len(chunks)),
             "--parallel-seqs", ",".join(chunk),
+            "--parallel-worker-progress-file", worker_progress,
             "--skip-trackeval",
             "--skip-coco-eval",
         ]
 
-        logger.info(f"Launching worker {rank} on CUDA_VISIBLE_DEVICES={env.get('CUDA_VISIBLE_DEVICES', '')}")
-        logger.info(" ".join(cmd))
-        procs.append(subprocess.Popen(cmd, env=env))
+        logger.info(
+            f"Launching worker {rank:02d} on CUDA_VISIBLE_DEVICES={env.get('CUDA_VISIBLE_DEVICES', '')} "
+            f"| log: {worker_log}"
+        )
+        proc = subprocess.Popen(
+            cmd,
+            env=env,
+            stdout=log_fh,
+            stderr=subprocess.STDOUT,
+            bufsize=1,
+            universal_newlines=True,
+        )
+        procs.append((rank, proc, worker_log))
+
+    done_txt = set()
+    progress_files = []
+    for rank, _, _ in procs:
+        progress_files.append(os.path.join(log_dir, f"worker_{rank:02d}_progress.json"))
+
+    def scan_completed_results():
+        current = set()
+        for p in Path(results_folder).glob("*.txt"):
+            if p.name not in expected_txt:
+                continue
+            try:
+                if p.stat().st_mtime >= progress_start_time:
+                    current.add(p.name)
+            except OSError:
+                continue
+        return current
 
     failed = []
-    for rank, proc in enumerate(procs):
-        ret = proc.wait()
-        if ret != 0:
-            failed.append((rank, ret))
+    try:
+        if args.parallel_progress_mode == "frames":
+            total_frames = len(val_loader)
+            pbar_total = total_frames
+            pbar_unit = "frame"
+            pbar_desc = f"Tracking frames ({len(chunks)} workers)"
+        else:
+            pbar_total = len(seqs)
+            pbar_unit = "seq"
+            pbar_desc = f"Tracking seqs ({len(chunks)} workers)"
+
+        last_frame_current = 0
+        with tqdm(
+            total=pbar_total,
+            desc=pbar_desc,
+            unit=pbar_unit,
+            dynamic_ncols=True,
+        ) as pbar:
+            while True:
+                alive = 0
+                for rank, proc, worker_log in procs:
+                    ret = proc.poll()
+                    if ret is None:
+                        alive += 1
+                    elif rank not in finished:
+                        finished.add(rank)
+                        if ret == 0:
+                            logger.info(f"Worker {rank:02d} finished successfully. log: {worker_log}")
+                        else:
+                            failed.append((rank, ret, worker_log))
+                            logger.error(f"Worker {rank:02d} failed with code {ret}. log: {worker_log}")
+
+                # Sequence completion is still tracked to validate output files and to
+                # optionally display seq-level mode, but frame mode is driven by JSON
+                # worker counters, not old result files.
+                current_done = scan_completed_results()
+                new_done = current_done - done_txt
+                if new_done:
+                    done_txt.update(new_done)
+
+                if args.parallel_progress_mode == "frames":
+                    frame_current, frame_total_seen, progress_seen, stale = read_worker_progress(progress_files)
+                    # If workers are still initializing, keep the total as the known
+                    # dataset total from the parent loader.
+                    frame_current = max(last_frame_current, min(frame_current, pbar_total))
+                    delta = frame_current - last_frame_current
+                    if delta > 0:
+                        pbar.update(delta)
+                        last_frame_current = frame_current
+                    postfix = {
+                        "frames": f"{last_frame_current}/{pbar_total}",
+                        "seqs": f"{len(done_txt)}/{len(seqs)}",
+                        "alive": alive,
+                    }
+                    if progress_seen < len(chunks):
+                        postfix["ready"] = f"{progress_seen}/{len(chunks)}"
+                    if stale:
+                        postfix["stale"] = stale
+                    pbar.set_postfix(postfix)
+                else:
+                    # Old/fallback seq-level display.
+                    if new_done:
+                        pbar.update(len(new_done))
+                    pbar.set_postfix(done=f"{len(done_txt)}/{len(seqs)}", alive=alive)
+
+                if len(finished) == len(procs):
+                    # Final refresh after all workers flush progress/result files.
+                    current_done = scan_completed_results()
+                    done_txt.update(current_done)
+                    if args.parallel_progress_mode == "frames":
+                        frame_current, _, _, _ = read_worker_progress(progress_files)
+                        frame_current = min(max(frame_current, last_frame_current), pbar_total)
+                        if frame_current > last_frame_current:
+                            pbar.update(frame_current - last_frame_current)
+                            last_frame_current = frame_current
+                        # If all workers succeeded, the evaluator may finish before the
+                        # last JSON write on network filesystems. Complete the bar only
+                        # after processes ended, not before.
+                        if not failed and last_frame_current < pbar_total:
+                            pbar.update(pbar_total - last_frame_current)
+                            last_frame_current = pbar_total
+                        pbar.set_postfix(frames=f"{last_frame_current}/{pbar_total}", seqs=f"{len(done_txt)}/{len(seqs)}", alive=0)
+                    else:
+                        if len(done_txt) > pbar.n:
+                            pbar.update(len(done_txt) - pbar.n)
+                    break
+
+                time.sleep(max(0.2, float(args.parallel_progress_interval)))
+    finally:
+        for fh in log_files:
+            try:
+                fh.close()
+            except Exception:
+                pass
 
     if failed:
-        logger.error(f"Some parallel workers failed: {failed}")
+        logger.error("Some parallel workers failed:")
+        for rank, ret, worker_log in failed:
+            logger.error(f"  worker {rank:02d}: return code {ret}, log: {worker_log}")
+        logger.error("Open the worker log above to see the original error traceback.")
         return 1
 
-    logger.info("All parallel workers completed.")
+    missing = sorted(expected_txt - done_txt)
+    if missing:
+        logger.error(f"Workers finished but {len(missing)} fresh result files were not detected.")
+        logger.error(f"First missing files: {missing[:10]}")
+        logger.error("Stopping before TrackEval to avoid evaluating stale result files from an older run.")
+        logger.error("Tip: rerun with --parallel-clean-results if you are reusing the same --expn.")
+        return 1
+
+    logger.info("All expected fresh sequence result files were produced.")
+
     if not args.skip_trackeval:
         return run_trackeval(exp, args, results_folder)
     return 0
-
 
 def main():
     parser = build_parser()
