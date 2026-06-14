@@ -142,3 +142,6 @@ visualizations
 results/
 error_log.txt
 .idea/
+
+
+pretrained/
