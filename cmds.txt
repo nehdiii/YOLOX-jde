@@ -1,0 +1,6 @@
+cmds for dancetrack 
+# testing tracking
+
+detection only 
+normal testing cmd :  
+// testing cmd : 
