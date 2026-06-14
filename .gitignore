@@ -147,12 +147,4 @@ error_log.txt
 
 # pretrained weights
 pretrained
-# large files
-pretrained/
-pretrained/*
-*.pth
-*.pth.tar
-*.pt
-*.ckpt
-YOLOX_outputs/
-datasets/
+
