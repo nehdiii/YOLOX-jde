@@ -1,8 +1,14 @@
+
+
+
+
+
 cmds for dancetrack 
+
+
 # testing tracking
 
 detection only 
-
 normal testing cmd :  
 python tools/run_hybrid_sort_dance.py -f exps/example/mot/yolox_dancetrack_val_hybrid_sort.py -b 1 -d 1 --fp16 --fuse --expn $exp_name 
 
@@ -15,14 +21,25 @@ CUDA_VISIBLE_DEVICES=0,1 python tools/run_hybrid_sort_dance_parallel.py \
   --parallel-gpus 0,1
 
 detection + reid sbs50 
-
 normal testing cmd : 
 python tools/run_hybrid_sort_dance.py -f exps/example/mot/yolox_dancetrack_val_hybrid_sort_reid.py -b 1 -d 1 --fp16 --fuse --expn $exp_name
 
 // testing cmd : 
 CUDA_VISIBLE_DEVICES=0,1 python tools/run_hybrid_sort_dance_parallel.py \
-  -f exps/example/mot/yolox_dancetrack_val_hybrid_sort_reid.py 
+  -f exps/example/mot/yolox_dancetrack_val_hybrid_sort_reid.py \
   -b 1 -d 1 --fp16 --fuse \
   --expn yolox_dancetrack_val_hybrid_sort_reid \
-  --parallel-workers 10 \
+  --parallel-workers 5 \
   --parallel-gpus 0,1
+
+prepare the jde version of dancetrack
+
+cd ~/HybridSORT
+
+python tools/convert_dance_to_coco_jde.py \
+  --data-root datasets/dancetrack \
+  --splits train val test \
+  --out-suffix _jde \
+  --verify
+
+# 
