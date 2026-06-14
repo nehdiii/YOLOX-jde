@@ -144,4 +144,4 @@ error_log.txt
 .idea/
 
 
-pretrained/*
+pretrained/*.pth.tar
