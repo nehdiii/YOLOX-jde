@@ -7,7 +7,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="${REPO_DIR:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-ACTIVATE_SCRIPT="${ACTIVATE_SCRIPT:-$HOME/pyenv/Track/bin/activate_track}"
+ACTIVATE_SCRIPT="${ACTIVATE_SCRIPT:-$HOME/pyenv/Track/bin/activate}"
 DATA_SOURCE="${DATA_SOURCE:-$REPO_DIR/datasets/data.zip}"
 SCRATCH_ROOT="${SCRATCH_ROOT:-$HOME/scratch/YOLOX-jde}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-$SCRATCH_ROOT/YOLOX_outputs}"
