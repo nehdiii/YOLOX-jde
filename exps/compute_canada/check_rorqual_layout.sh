@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="${REPO_DIR:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 DATA_SOURCE="${DATA_SOURCE:-$REPO_DIR/datasets/data.zip}"
 CKPT="${CKPT:-$REPO_DIR/pretrained/yolox_x.pth}"
-ACTIVATE_SCRIPT="${ACTIVATE_SCRIPT:-$HOME/pyenv/Track/bin/activate_track}"
+ACTIVATE_SCRIPT="${ACTIVATE_SCRIPT:-$HOME/pyenv/Track/bin/activate}"
 
 echo "Repo          : $REPO_DIR"
 echo "Data zip/source: $DATA_SOURCE"
