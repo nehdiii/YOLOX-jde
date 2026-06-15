@@ -11,8 +11,8 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="${REPO_DIR:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
+REPO_DIR="${REPO_DIR:-$HOME/links/projects/YOLOX-jde}"
+cd "$REPO_DIR"
 
 export REPO_DIR
 export DATA_SOURCE="${DATA_SOURCE:-$REPO_DIR/datasets/data.zip}"
@@ -23,4 +23,4 @@ export BATCH_SIZE="${BATCH_SIZE:-48}"
 export NUM_DEVICES="${NUM_DEVICES:-1}"
 export MAKE_JDE=0
 
-bash "./run_dancetrack_training_rorqual.sh"
+bash "$REPO_DIR/exps/compute_canada/run_dancetrack_training_rorqual.sh"
