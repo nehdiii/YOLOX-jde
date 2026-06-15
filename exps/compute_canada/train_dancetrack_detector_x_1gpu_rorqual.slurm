@@ -23,4 +23,4 @@ export BATCH_SIZE="${BATCH_SIZE:-48}"
 export NUM_DEVICES="${NUM_DEVICES:-1}"
 export MAKE_JDE=0
 
-bash "$REPO_DIR/exps/compute_canada/run_dancetrack_training_rorqual.sh"
+bash "./run_dancetrack_training_rorqual.sh"
