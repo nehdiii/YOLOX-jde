@@ -32,6 +32,8 @@ CUDA_VISIBLE_DEVICES=0,1 python tools/run_hybrid_sort_dance_parallel.py \
   --parallel-workers 5 \
   --parallel-gpus 0,1
 
+
+
 prepare the jde version of dancetrack
 
 cd ~/HybridSORT
@@ -42,4 +44,19 @@ python tools/convert_dance_to_coco_jde.py \
   --out-suffix _jde \
   --verify
 
-# 
+# test jde v1 for dancetrack 
+
+CUDA_VISIBLE_DEVICES=0 python tools/run_hybrid_sort_dance_jde.py \
+  -f exps/example/dancetrack/yolox_x_dancetrack_jde_v1.py \
+  -c YOLOX_outputs/yolox_x_dancetrack_jde_v1/best_ckpt.pth.tar \
+  -b 1 -d 1 --fp16 --fuse \
+  --expn yolox_x_dancetrack_jde_v1_val
+
+CUDA_VISIBLE_DEVICES=0,1 python tools/run_hybrid_sort_dance_parallel.py \
+  -f exps/example/dancetrack/yolox_x_dancetrack_jde_v1.py \
+  -c YOLOX_outputs/yolox_x_dancetrack_jde_v1/best_ckpt.pth.tar \
+  -b 1 -d 1 --fp16 --fuse \
+  --expn yolox_dancetrack_val_hybrid_sort_reid \
+  --parallel-workers 10 \
+  --parallel-gpus 0,1 \
+  --expn yolox_x_dancetrack_jde_v1_val
