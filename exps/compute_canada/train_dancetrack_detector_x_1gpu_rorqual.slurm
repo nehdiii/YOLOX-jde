@@ -2,10 +2,10 @@
 #SBATCH --account=def-mpederso_gpu
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --gpus-per-node=h100:1
+#SBATCH --gpus-per-node=l100:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=48G
-#SBATCH --time=02:00:00
+#SBATCH --time=01:00:00
 #SBATCH --job-name=dt_det_x_1gpu
 #SBATCH --output=logs_compute_canada/%x-%j.out
 
