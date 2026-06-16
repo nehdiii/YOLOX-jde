@@ -69,7 +69,7 @@ echo "module load StdEnv/2020"
 echo "module load gcc/9.3.0"
 echo "module load cuda/11.3"
 echo "module load python/3.9"
-echo "module load faiss/1.8.0"
+echo "module load faiss/1.7.4"
 echo "source $ENV_DIR/bin/activate"
 echo "============================================================"
 
