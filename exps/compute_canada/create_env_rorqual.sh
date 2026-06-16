@@ -6,30 +6,32 @@ ENV_DIR="${ENV_DIR:-$HOME/pyenv/Track}"
 echo "============================================================"
 echo "Creating YOLOX-JDE environment"
 echo "ENV_DIR: $ENV_DIR"
-echo "Python : 3.8"
-echo "Torch  : 1.10.0+cu111"
+echo "Python : 3.9"
+echo "Torch  : 1.11.0+cu113"
+echo "CUDA   : 11.3"
 echo "============================================================"
-
 
 module --force purge
 module load StdEnv/2020 || true
 module load gcc/9.3.0 || true
-module load cuda/11.1 || module load cuda/11.1.1 || true
-module load python/3.8 || module load python/3.8.10
+module load cuda/11.3 || true
+module load python/3.9 || module load python/3.9.6 || module load python/3.9.13
 
 rm -rf "$ENV_DIR"
 
 python -m virtualenv "$ENV_DIR"
 source "$ENV_DIR/bin/activate"
 
-python -m pip install --upgrade "pip==24.0" "setuptools<70" wheel
+python -m pip install --upgrade "pip<25" "setuptools<70" "wheel<0.45"
+
 pip install "numpy<1.24" cython
-# PyTorch 1.10.0 + CUDA 11.1
+
+# PyTorch 1.11.0 + CUDA 11.3
 pip install \
-  torch==1.10.0+cu111 \
-  torchvision==0.11.1+cu111 \
-  torchaudio==0.10.0 \
-  -f https://download.pytorch.org/whl/torch_stable.html
+  torch==1.11.0+cu113 \
+  torchvision==0.12.0+cu113 \
+  torchaudio==0.11.0 \
+  --extra-index-url https://download.pytorch.org/whl/cu113
 
 # YOLOX / MOT / tracking dependencies
 pip install \
@@ -52,8 +54,8 @@ pip install \
   cython_bbox \
   faiss-cpu
 
-# Optional but often needed by older fastreid/detectron-style code
-pip install "protobuf<4" "setuptools<60"
+# Older FastReID / Detectron-style compatibility
+pip install "protobuf<4"
 
 echo "============================================================"
 echo "Environment created"
@@ -64,17 +66,39 @@ echo "============================================================"
 python - <<'PY'
 import sys
 import torch
+
 print("python:", sys.version)
 print("torch:", torch.__version__)
+print("torch cuda:", torch.version.cuda)
 print("cuda available:", torch.cuda.is_available())
+
+try:
+    import torchvision
+    print("torchvision:", torchvision.__version__)
+except Exception as e:
+    print("torchvision import failed:", e)
+
+try:
+    import torchaudio
+    print("torchaudio:", torchaudio.__version__)
+except Exception as e:
+    print("torchaudio import failed:", e)
+
 try:
     import faiss
     print("faiss:", faiss.__version__)
 except Exception as e:
     print("faiss import failed:", e)
+
 try:
     from cython_bbox import bbox_overlaps
     print("cython_bbox OK")
 except Exception as e:
     print("cython_bbox failed:", e)
+
+try:
+    import cv2
+    print("opencv:", cv2.__version__)
+except Exception as e:
+    print("opencv import failed:", e)
 PY
