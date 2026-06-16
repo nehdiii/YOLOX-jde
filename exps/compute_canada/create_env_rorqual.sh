@@ -9,7 +9,7 @@ echo "ENV_DIR: $ENV_DIR"
 echo "Python : 3.9"
 echo "Torch  : 1.11.0+cu113"
 echo "CUDA   : 11.3"
-echo "FAISS  : module faiss/1.7.4"
+echo "FAISS  : module faiss/1.8.0"
 echo "============================================================"
 
 module --force purge
@@ -19,7 +19,7 @@ module load cuda/11.3 || true
 module load python/3.9 || module load python/3.9.6 || module load python/3.9.13
 
 # Load FAISS from Compute Canada modules, not pip
-module load faiss/1.7.4
+module load faiss/1.8.0
 
 rm -rf "$ENV_DIR"
 
@@ -69,7 +69,7 @@ echo "module load StdEnv/2020"
 echo "module load gcc/9.3.0"
 echo "module load cuda/11.3"
 echo "module load python/3.9"
-echo "module load faiss/1.7.4"
+echo "module load faiss/1.8.0"
 echo "source $ENV_DIR/bin/activate"
 echo "============================================================"
 
