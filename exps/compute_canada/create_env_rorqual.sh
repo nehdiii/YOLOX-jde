@@ -1,8 +1,21 @@
 #!/bin/bash
 # Robust Rorqual / Compute Canada environment for YOLOX-JDE on H100.
 #
+# Final clean stack:
+#   - StdEnv/2023
+#   - gcc/12.3
+#   - cuda/12.2
+#   - python/3.11
+#   - PyTorch 2.5.1 + CUDA 12.4 wheel
+#   - OpenCV from Compute Canada module
+#   - FAISS from Compute Canada module
+#
+# Why Python 3.11:
+#   On Rorqual, loading opencv/faiss under StdEnv/2023 reloads python/3.10 to python/3.11.
+#   So we use Python 3.11 consistently instead of fighting the module stack.
+#
 # What this script fixes:
-#   - H100 requires a modern PyTorch build. Old torch 1.10/1.11 CUDA 11.x fails with:
+#   - H100 requires modern PyTorch. Old torch 1.10/1.11 CUDA 11.x fails with:
 #       "no kernel image is available for execution on the device"
 #   - Compute Canada blocks pip OpenCV; use the opencv module.
 #   - FAISS should come from the Compute Canada faiss module, not pip faiss-cpu.
@@ -10,6 +23,13 @@
 #   - Old FastReID code uses collections.Mapping; patch to collections.abc.Mapping.
 
 set -euo pipefail
+
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "[ERROR] Please run this script with bash, not sh."
+    echo "Use:"
+    echo "  bash exps/compute_canada/create_env_rorqual.sh"
+    exit 1
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="${REPO_DIR:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
@@ -19,7 +39,7 @@ echo "============================================================"
 echo "Creating YOLOX-JDE H100 environment"
 echo "REPO_DIR: $REPO_DIR"
 echo "ENV_DIR : $ENV_DIR"
-echo "Stack   : StdEnv/2023 + gcc/12.3 + cuda/12.2 + python/3.10"
+echo "Stack   : StdEnv/2023 + gcc/12.3 + cuda/12.2 + python/3.11"
 echo "Torch   : 2.5.1 + CUDA 12.4 wheel"
 echo "OpenCV  : Compute Canada module"
 echo "FAISS   : Compute Canada faiss/1.7.4 module"
@@ -41,13 +61,13 @@ module --force purge
 module load StdEnv/2023
 module load gcc/12.3
 module load cuda/12.2
-module load python/3.10
+module load python/3.11
 
 # Compute Canada OpenCV must be loaded as a module, not installed with pip.
 if ! module load opencv; then
     echo "[ERROR] Could not load OpenCV module."
-    echo "Run: module spider opencv"
-    echo "Then replace 'module load opencv' with the exact version if needed."
+    echo "Run:"
+    echo "  module spider opencv"
     exit 1
 fi
 
@@ -56,7 +76,8 @@ fi
 # and compatible python/3.10 or python/3.11.
 if ! module load faiss/1.7.4; then
     echo "[ERROR] Could not load faiss/1.7.4."
-    echo "Run: module spider faiss/1.7.4"
+    echo "Run:"
+    echo "  module spider faiss/1.7.4"
     exit 1
 fi
 
@@ -76,7 +97,7 @@ python - <<'PY'
 import sys
 print("Python executable:", sys.executable)
 print("Python version   :", sys.version)
-assert sys.version_info[:2] == (3, 10), "This env must use python/3.10"
+assert sys.version_info[:2] == (3, 11), "This env must use python/3.11"
 PY
 
 echo "==> Installing build tools"
@@ -92,7 +113,10 @@ python -m pip install --no-cache-dir \
 
 echo "==> Installing H100-compatible PyTorch trio"
 # Official matching PyTorch 2.5.1 wheel set:
-# torch==2.5.1, torchvision==0.20.1, torchaudio==2.5.1, CUDA 12.4 wheels.
+#   torch==2.5.1
+#   torchvision==0.20.1
+#   torchaudio==2.5.1
+#   CUDA 12.4 wheels
 python -m pip uninstall -y torch torchvision torchaudio || true
 python -m pip install --no-cache-dir --force-reinstall \
     torch==2.5.1 \
@@ -100,9 +124,27 @@ python -m pip install --no-cache-dir --force-reinstall \
     torchaudio==2.5.1 \
     --index-url https://download.pytorch.org/whl/cu124
 
+echo "==> Verifying torch/torchvision before installing the rest"
+python - <<'PY'
+import torch
+import torchvision
+from torchvision.ops import nms
+
+print("torch:", torch.__version__)
+print("torch cuda:", torch.version.cuda)
+print("torchvision:", torchvision.__version__)
+print("torchvision nms OK")
+PY
+
 echo "==> Installing YOLOX / tracking / FastReID Python dependencies"
-# Do NOT install opencv-python or opencv-python-headless on Compute Canada.
-# Do NOT install faiss-cpu/faiss-gpu with pip here; FAISS is loaded as a module.
+# Important:
+#   - do NOT install opencv-python
+#   - do NOT install opencv-python-headless
+#   - do NOT install faiss-cpu
+#   - do NOT install faiss-gpu
+#
+# OpenCV comes from module load opencv.
+# FAISS comes from module load faiss/1.7.4.
 python -m pip install --no-cache-dir \
     loguru \
     tqdm \
@@ -133,19 +175,18 @@ python -m pip install --no-cache-dir \
 echo "==> Patching old FastReID imports for Python 3.10+"
 python - <<'PY'
 from pathlib import Path
+import os
 
-repo = Path(__import__("os").environ["REPO_DIR"])
-targets = [
-    repo / "fast_reid/fastreid/evaluation/testing.py",
-    repo / "fast_reid/fastreid/data/build.py",
-]
+repo = Path(os.environ["REPO_DIR"])
 
-for p in targets:
-    if not p.exists():
-        print("[WARN] missing:", p)
+for p in repo.rglob("*.py"):
+    # Only patch FastReID files to avoid touching unrelated code too much.
+    if "fast_reid" not in str(p):
         continue
+
     s = p.read_text(errors="ignore")
     old = s
+
     s = s.replace(
         "from collections import Mapping, OrderedDict",
         "from collections import OrderedDict\nfrom collections.abc import Mapping",
@@ -158,11 +199,22 @@ for p in targets:
         "from collections import Mapping",
         "from collections.abc import Mapping",
     )
+    s = s.replace(
+        "from collections import MutableMapping",
+        "from collections.abc import MutableMapping",
+    )
+    s = s.replace(
+        "from collections import Sequence",
+        "from collections.abc import Sequence",
+    )
+    s = s.replace(
+        "from collections import Iterable",
+        "from collections.abc import Iterable",
+    )
+
     if s != old:
         p.write_text(s)
         print("[PATCHED]", p)
-    else:
-        print("[OK]", p)
 PY
 
 echo "==> Installing YOLOX editable without build isolation"
@@ -170,8 +222,9 @@ cd "$REPO_DIR"
 export PYTHONPATH="$REPO_DIR:${PYTHONPATH:-}"
 export MAX_JOBS="${MAX_JOBS:-4}"
 
-# Important: setup.py imports torch. Without --no-build-isolation, pip creates a temp
-# build env with no torch and fails with "ModuleNotFoundError: torch".
+# Important:
+# setup.py imports torch.
+# Without --no-build-isolation, pip creates a temporary build env with no torch and fails.
 python -m pip install -e . --no-build-isolation --no-deps
 
 echo "==> Writing activation helper"
@@ -181,12 +234,13 @@ module --force purge
 module load StdEnv/2023
 module load gcc/12.3
 module load cuda/12.2
-module load python/3.10
+module load python/3.11
 module load opencv
 module load faiss/1.7.4
 source "$HOME/pyenv/Track/bin/activate"
 export PYTHONPATH="$HOME/links/projects/YOLOX-jde:${PYTHONPATH:-}"
 SH
+
 chmod +x "$REPO_DIR/exps/compute_canada/activate_track_h100.sh"
 
 echo "==> Final verification"
@@ -198,12 +252,14 @@ import torch
 print("torch:", torch.__version__)
 print("torch cuda:", torch.version.cuda)
 print("cuda available:", torch.cuda.is_available())
+
 if torch.cuda.is_available():
     print("gpu:", torch.cuda.get_device_name(0))
     print("capability:", torch.cuda.get_device_capability(0))
 
 import torchvision
 print("torchvision:", torchvision.__version__)
+
 from torchvision.ops import nms
 print("torchvision nms OK")
 
