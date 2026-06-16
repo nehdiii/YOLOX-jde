@@ -2,9 +2,8 @@
 import logging
 import pprint
 import sys
-#from collections import Mapping, OrderedDict
-from collections import OrderedDict
-from collections.abc import Mapping
+from collections import Mapping, OrderedDict
+
 import numpy as np
 from tabulate import tabulate
 from termcolor import colored
