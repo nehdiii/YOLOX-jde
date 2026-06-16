@@ -10,13 +10,11 @@ echo "Python : 3.8"
 echo "Torch  : 1.10.0+cu111"
 echo "============================================================"
 
-module --force purge
 
-# Older stack suitable for Python 3.8 / CUDA 11.1.
-# If one module is not available, run: module spider python/3.8 or module spider cuda/11.1
+module --force purge
 module load StdEnv/2020 || true
 module load gcc/9.3.0 || true
-module load cuda/11.1 || true
+module load cuda/11.1 || module load cuda/11.1.1 || true
 module load python/3.8 || module load python/3.8.10
 
 rm -rf "$ENV_DIR"
@@ -24,11 +22,8 @@ rm -rf "$ENV_DIR"
 python -m virtualenv "$ENV_DIR"
 source "$ENV_DIR/bin/activate"
 
-python -m pip install --upgrade pip setuptools wheel
-
-# Important: old YOLOX/FastReID repos are safer with numpy<2.
+python -m pip install --upgrade "pip==24.0" "setuptools<70" wheel
 pip install "numpy<1.24" cython
-
 # PyTorch 1.10.0 + CUDA 11.1
 pip install \
   torch==1.10.0+cu111 \
