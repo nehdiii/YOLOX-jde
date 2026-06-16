@@ -19,7 +19,7 @@ export DATA_SOURCE="${DATA_SOURCE:-$REPO_DIR/datasets/data.zip}"
 export EXP_FILE="${EXP_FILE:-$REPO_DIR/exps/example/mot/yolox_dancetrack_val.py}"
 export EXP_NAME="${EXP_NAME:-yolox_x_dancetrack_detector_cc_1gpu}"
 export CKPT="${CKPT:-$REPO_DIR/pretrained/yolox_x.pth}"
-export BATCH_SIZE="${BATCH_SIZE:-24}"
+export BATCH_SIZE="${BATCH_SIZE:-48}"
 export NUM_DEVICES="${NUM_DEVICES:-1}"
 export MAKE_JDE=0
 

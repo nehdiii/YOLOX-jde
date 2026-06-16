@@ -14,7 +14,7 @@ OUTPUT_ROOT="${OUTPUT_ROOT:-$SCRATCH_ROOT/YOLOX_outputs}"
 EXP_FILE="${EXP_FILE:?EXP_FILE must be set by the Slurm script}"
 EXP_NAME="${EXP_NAME:?EXP_NAME must be set by the Slurm script}"
 CKPT="${CKPT:-$REPO_DIR/pretrained/yolox_x.pth}"
-BATCH_SIZE="${BATCH_SIZE:-24}"
+BATCH_SIZE="${BATCH_SIZE:-48}"
 MAKE_JDE="${MAKE_JDE:-0}"
 
 if [ -z "${NUM_DEVICES:-}" ]; then
