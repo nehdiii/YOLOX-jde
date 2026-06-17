@@ -35,3 +35,8 @@ try:
     from .mot_evaluator_dance_jde_v1 import MOTEvaluator as MOTEvaluatorDanceJDEV1
 except Exception:
     MOTEvaluatorDanceJDEV1 = None
+
+try:
+    from .mot_evaluator_dance_jde_v1 import MOTEvaluatorJDE
+except Exception:
+    MOTEvaluatorJDE = None
