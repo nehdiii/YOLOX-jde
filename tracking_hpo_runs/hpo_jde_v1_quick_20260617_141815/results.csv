@@ -1,0 +1,17 @@
+index,name,expn,returncode,duration_sec,track_thresh,low_thresh,iou_thresh,inertia,EG_weight_high_score,EG_weight_low_score,alpha,high_score_matching_thresh,low_score_matching_thresh,TCM_first_step_weight,TCM_byte_step_weight,asso
+0,baseline,hpo_jde_v1_quick_000_baseline,-999,0.0,0.6,0.1,0.15,0.05,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+1,track050,hpo_jde_v1_quick_001_track050,-999,0.0,0.5,0.1,0.15,0.05,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+2,track055,hpo_jde_v1_quick_002_track055,-999,0.0,0.55,0.1,0.15,0.05,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+3,track065,hpo_jde_v1_quick_003_track065,-999,0.0,0.65,0.1,0.15,0.05,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+4,low005,hpo_jde_v1_quick_004_low005,-999,0.0,0.6,0.05,0.15,0.05,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+5,low020,hpo_jde_v1_quick_005_low020,-999,0.0,0.6,0.2,0.15,0.05,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+6,iou010,hpo_jde_v1_quick_006_iou010,-999,0.0,0.6,0.1,0.1,0.05,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+7,iou020,hpo_jde_v1_quick_007_iou020,-999,0.0,0.6,0.1,0.2,0.05,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+8,inertia002,hpo_jde_v1_quick_008_inertia002,-999,0.0,0.6,0.1,0.15,0.02,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+9,inertia010,hpo_jde_v1_quick_009_inertia010,-999,0.0,0.6,0.1,0.15,0.1,4.0,4.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+10,eg3,hpo_jde_v1_quick_010_eg3,-999,0.0,0.6,0.1,0.15,0.05,3.0,3.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+11,eg5,hpo_jde_v1_quick_011_eg5,-999,0.0,0.6,0.1,0.15,0.05,5.0,5.4,0.8,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+12,alpha070,hpo_jde_v1_quick_012_alpha070,-999,0.0,0.6,0.1,0.15,0.05,4.0,4.4,0.7,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+13,alpha090,hpo_jde_v1_quick_013_alpha090,-999,0.0,0.6,0.1,0.15,0.05,4.0,4.4,0.9,0.8,0.5,1.0,1.0,Height_Modulated_IoU
+14,match_loose,hpo_jde_v1_quick_014_match_loose,-999,0.0,0.6,0.1,0.15,0.05,4.0,4.4,0.8,0.7,0.45,1.0,1.0,Height_Modulated_IoU
+15,match_strict,hpo_jde_v1_quick_015_match_strict,-999,0.0,0.6,0.1,0.15,0.05,4.0,4.4,0.8,0.9,0.55,1.0,1.0,Height_Modulated_IoU

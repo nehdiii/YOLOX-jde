@@ -1,0 +1,277 @@
+{
+    "description": "Quick one-factor JDE V1 tracking HPO grid",
+    "configs": [
+      {
+        "name": "baseline",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "track050",
+        "opts": {
+          "track_thresh": 0.5,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "track055",
+        "opts": {
+          "track_thresh": 0.55,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "track065",
+        "opts": {
+          "track_thresh": 0.65,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "low005",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.05,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "low020",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.2,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "iou010",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.1,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "iou020",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.2,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "inertia002",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.02,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "inertia010",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.1,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "eg3",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 3.0,
+          "EG_weight_low_score": 3.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "eg5",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 5.0,
+          "EG_weight_low_score": 5.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "alpha070",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.7,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "alpha090",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.9,
+          "high_score_matching_thresh": 0.8,
+          "low_score_matching_thresh": 0.5,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "match_loose",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.7,
+          "low_score_matching_thresh": 0.45,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      },
+      {
+        "name": "match_strict",
+        "opts": {
+          "track_thresh": 0.6,
+          "low_thresh": 0.1,
+          "iou_thresh": 0.15,
+          "inertia": 0.05,
+          "EG_weight_high_score": 4.0,
+          "EG_weight_low_score": 4.4,
+          "alpha": 0.8,
+          "high_score_matching_thresh": 0.9,
+          "low_score_matching_thresh": 0.55,
+          "TCM_first_step_weight": 1.0,
+          "TCM_byte_step_weight": 1.0,
+          "asso": "Height_Modulated_IoU"
+        }
+      }
+    ]
+  }
