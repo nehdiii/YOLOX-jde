@@ -20,7 +20,7 @@ export OUTPUT_ROOT="$SCRATCH_ROOT/YOLOX_outputs"
 
 # JDE V1 ablation: v1_rw025_dim128
 # Exp file overrides reid_weight/reid_dim/max_epoch.
-export EXP_FILE="$REPO_DIR/exps/compute_canada/dancetrack_ablations/v1_rw025_dim128/exp_v1_rw025_dim128.py"
+export EXP_FILE="$REPO_DIR/exps/compute_canada/dancetrack_ablations/reid_weight/exp_v1_rw025_dim128.py"
 export EXP_NAME="yolox_x_dancetrack_jde_v1_rw025_dim128_cc_2nodes_8gpu"
 export CKPT="$REPO_DIR/pretrained/yolox_x.pth"
 
