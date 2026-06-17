@@ -15,6 +15,7 @@ python tools/run_hybrid_sort_dance.py -f exps/example/mot/yolox_dancetrack_val_h
 // testing cmd : 
 CUDA_VISIBLE_DEVICES=0,1 python tools/run_hybrid_sort_dance_parallel.py \
   -f exps/example/mot/yolox_dancetrack_val_hybrid_sort.py \
+  -c YOLOX_outputs/yolox_x_dancetrack_detector_cc_2nodes_8gpu/best_ckpt.pth.tar \
   -b 1 -d 1 --fp16 --fuse \
   --expn yolox_dancetrack_val_hybrid_sort \
   --parallel-workers 10 \
@@ -27,6 +28,7 @@ python tools/run_hybrid_sort_dance.py -f exps/example/mot/yolox_dancetrack_val_h
 // testing cmd : 
 CUDA_VISIBLE_DEVICES=0,1 python tools/run_hybrid_sort_dance_parallel.py \
   -f exps/example/mot/yolox_dancetrack_val_hybrid_sort_reid.py \
+  -c YOLOX_outputs/yolox_x_dancetrack_detector_cc_2nodes_8gpu/best_ckpt.pth.tar \
   -b 1 -d 1 --fp16 --fuse \
   --expn yolox_dancetrack_val_hybrid_sort_reid \
   --parallel-workers 5 \

@@ -4,6 +4,10 @@
 
 set -euo pipefail
 
+
+NUM_MACHINES="${NUM_MACHINES:-1}"
+MACHINE_RANK="${MACHINE_RANK:-0}"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="${REPO_DIR:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
@@ -14,7 +18,7 @@ OUTPUT_ROOT="${OUTPUT_ROOT:-$SCRATCH_ROOT/YOLOX_outputs}"
 EXP_FILE="${EXP_FILE:?EXP_FILE must be set by the Slurm script}"
 EXP_NAME="${EXP_NAME:?EXP_NAME must be set by the Slurm script}"
 CKPT="${CKPT:-$REPO_DIR/pretrained/yolox_x.pth}"
-BATCH_SIZE="${BATCH_SIZE:-24}"
+BATCH_SIZE="${BATCH_SIZE:-48}"
 MAKE_JDE="${MAKE_JDE:-0}"
 
 if [ -z "${NUM_DEVICES:-}" ]; then
@@ -109,6 +113,8 @@ python -u tools/train.py \
     -d "$NUM_DEVICES" \
     -b "$BATCH_SIZE" \
     -c "$CKPT" \
+    --num_machines "$NUM_MACHINES" \
+    --machine_rank "$MACHINE_RANK" \
     --fp16 \
     output_dir "$OUTPUT_ROOT"
 
