@@ -92,7 +92,7 @@ class Exp(MyExp):
         )
 
         # JDE branch settings.
-        self.reid_dim = 128
+        self.reid_dim = 64 # 128 
         self.reid_weight = 1.0
         self.use_uncertainty = False
         self.label_id_index = 5
