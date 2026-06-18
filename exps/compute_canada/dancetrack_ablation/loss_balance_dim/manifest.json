@@ -1,0 +1,122 @@
+[
+    {
+      "name": "v1_lb_rw100_dim064",
+      "version": "v1",
+      "dim": 64,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v1_lb_rw100_dim064/exp_v1_lb_rw100_dim064.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v1_lb_rw100_dim064/train_v1_lb_rw100_dim064.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v1_lb_rw100_dim064_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v1_lb_rw100_dim128",
+      "version": "v1",
+      "dim": 128,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v1_lb_rw100_dim128/exp_v1_lb_rw100_dim128.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v1_lb_rw100_dim128/train_v1_lb_rw100_dim128.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v1_lb_rw100_dim128_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v1_lb_rw100_dim256",
+      "version": "v1",
+      "dim": 256,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v1_lb_rw100_dim256/exp_v1_lb_rw100_dim256.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v1_lb_rw100_dim256/train_v1_lb_rw100_dim256.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v1_lb_rw100_dim256_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v1_lb_rw100_dim512",
+      "version": "v1",
+      "dim": 512,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v1_lb_rw100_dim512/exp_v1_lb_rw100_dim512.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v1_lb_rw100_dim512/train_v1_lb_rw100_dim512.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v1_lb_rw100_dim512_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v2_lb_rw100_dim064",
+      "version": "v2",
+      "dim": 64,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_lb_rw100_dim064/exp_v2_lb_rw100_dim064.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_lb_rw100_dim064/train_v2_lb_rw100_dim064.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v2_lb_rw100_dim064_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v2_lb_rw100_dim128",
+      "version": "v2",
+      "dim": 128,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_lb_rw100_dim128/exp_v2_lb_rw100_dim128.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_lb_rw100_dim128/train_v2_lb_rw100_dim128.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v2_lb_rw100_dim128_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v2_lb_rw100_dim256",
+      "version": "v2",
+      "dim": 256,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_lb_rw100_dim256/exp_v2_lb_rw100_dim256.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_lb_rw100_dim256/train_v2_lb_rw100_dim256.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v2_lb_rw100_dim256_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v2_lb_rw100_dim512",
+      "version": "v2",
+      "dim": 512,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_lb_rw100_dim512/exp_v2_lb_rw100_dim512.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_lb_rw100_dim512/train_v2_lb_rw100_dim512.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v2_lb_rw100_dim512_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v2_deform_lb_rw100_dim064",
+      "version": "v2_deform",
+      "dim": 64,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_deform_lb_rw100_dim064/exp_v2_deform_lb_rw100_dim064.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_deform_lb_rw100_dim064/train_v2_deform_lb_rw100_dim064.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v2_deform_lb_rw100_dim064_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v2_deform_lb_rw100_dim128",
+      "version": "v2_deform",
+      "dim": 128,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_deform_lb_rw100_dim128/exp_v2_deform_lb_rw100_dim128.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_deform_lb_rw100_dim128/train_v2_deform_lb_rw100_dim128.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v2_deform_lb_rw100_dim128_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v2_deform_lb_rw100_dim256",
+      "version": "v2_deform",
+      "dim": 256,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_deform_lb_rw100_dim256/exp_v2_deform_lb_rw100_dim256.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_deform_lb_rw100_dim256/train_v2_deform_lb_rw100_dim256.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v2_deform_lb_rw100_dim256_cc_2nodes_8gpu"
+    },
+    {
+      "name": "v2_deform_lb_rw100_dim512",
+      "version": "v2_deform",
+      "dim": 512,
+      "reid_weight": 1.0,
+      "use_uncertainty": true,
+      "exp_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_deform_lb_rw100_dim512/exp_v2_deform_lb_rw100_dim512.py",
+      "slurm_file": "exps/compute_canada/dancetrack_ablations/loss_balance_dim/v2_deform_lb_rw100_dim512/train_v2_deform_lb_rw100_dim512.slurm",
+      "exp_name": "yolox_x_dancetrack_jde_v2_deform_lb_rw100_dim512_cc_2nodes_8gpu"
+    }
+  ]
