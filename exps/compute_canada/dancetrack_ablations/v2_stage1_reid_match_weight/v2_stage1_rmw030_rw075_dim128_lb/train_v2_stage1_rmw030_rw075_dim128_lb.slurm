@@ -47,4 +47,4 @@ srun --ntasks=2 --ntasks-per-node=1 bash -lc '
     cd "$REPO_DIR"
     export MACHINE_RANK="$SLURM_NODEID"
     bash "$REPO_DIR/exps/compute_canada/run_dancetrack_training_rorqual.sh"
-'
+'   
