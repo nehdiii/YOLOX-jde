@@ -1,0 +1,45 @@
+{
+    "fixed": {
+      "version": "JDE V1",
+      "reid_dim": 128,
+      "use_uncertainty": true,
+      "no_aug_epochs": 1,
+      "reid_weight": "0.75 bookkeeping only when use_uncertainty=True",
+      "batch_size": 48,
+      "nodes": 2,
+      "gpus_per_node": 4
+    },
+    "sweep": [
+      {
+        "max_epoch": 12,
+        "requested_time": "01:30:00",
+        "estimated_actual_minutes": 54.0
+      },
+      {
+        "max_epoch": 16,
+        "requested_time": "02:00:00",
+        "estimated_actual_minutes": 72.0
+      },
+      {
+        "max_epoch": 20,
+        "requested_time": "02:30:00",
+        "estimated_actual_minutes": 90.0
+      },
+      {
+        "max_epoch": 25,
+        "requested_time": "03:00:00",
+        "estimated_actual_minutes": 112.5
+      },
+      {
+        "max_epoch": 30,
+        "requested_time": "03:30:00",
+        "estimated_actual_minutes": 135.0
+      }
+    ],
+    "files": {
+      "exp": "exps/compute_canada/dancetrack_ablations/v1_epoch_ablation_dim128_lb_compact/exp_v1_epoch_dim128_lb_param.py",
+      "slurm": "exps/compute_canada/dancetrack_ablations/v1_epoch_ablation_dim128_lb_compact/train_v1_epoch_dim128_lb_generic.slurm",
+      "submit": "exps/compute_canada/dancetrack_ablations/v1_epoch_ablation_dim128_lb_compact/submit_v1_epoch_sweep.sh",
+      "preflight": "exps/compute_canada/dancetrack_ablations/v1_epoch_ablation_dim128_lb_compact/preflight_v1_epoch_dim128_lb.py"
+    }
+  }
