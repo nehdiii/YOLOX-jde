@@ -1,10 +1,11 @@
 # encoding: utf-8
-"""YOLOX-X DanceTrack JDE V1 training/tracking config.
+"""YOLOX-X DanceTrack JDE V2 training/tracking config.
 
-JDE V1 means:
-- detector assignment remains YOLOX/SimOTA only;
-- ReID loss is computed after assignment on positive anchors;
-- no ReID term is used inside SimOTA matching.
+JDE V2 means:
+- dense JDE ReID branch is trained as in V1;
+- predicted embeddings are also used inside SimOTA assignment;
+- the matching cost becomes detection cost + lambda_id * identity cost;
+- dynamic-k can optionally use the identity-aware quality.
 """
 
 import json
@@ -25,8 +26,8 @@ def infer_num_ids_from_coco(ann_path, fallback=1):
     top-level `num_ids`. Therefore we use `num_ids` directly. Do not add +1.
     """
     if not os.path.exists(ann_path):
-        print(f"[DanceTrack-JDE-V1] WARNING: annotation file not found: {ann_path}")
-        print(f"[DanceTrack-JDE-V1] Using fallback num_ids={fallback}")
+        print(f"[DanceTrack-JDE-V2] WARNING: annotation file not found: {ann_path}")
+        print(f"[DanceTrack-JDE-V2] Using fallback num_ids={fallback}")
         return int(fallback)
 
     with open(ann_path, "r") as f:
@@ -34,7 +35,7 @@ def infer_num_ids_from_coco(ann_path, fallback=1):
 
     if "num_ids" in data and int(data["num_ids"]) > 0:
         num_ids = int(data["num_ids"])
-        print(f"[DanceTrack-JDE-V1] num_ids from top-level metadata: {num_ids}")
+        print(f"[DanceTrack-JDE-V2] num_ids from top-level metadata: {num_ids}")
         return num_ids
 
     tids = []
@@ -48,12 +49,12 @@ def infer_num_ids_from_coco(ann_path, fallback=1):
             tids.append(tid)
 
     if not tids:
-        print("[DanceTrack-JDE-V1] WARNING: no valid track_id found; using fallback")
+        print("[DanceTrack-JDE-V2] WARNING: no valid track_id found; using fallback")
         return int(fallback)
 
     num_ids = max(tids) + 1
     print(
-        f"[DanceTrack-JDE-V1] inferred num_ids={num_ids} "
+        f"[DanceTrack-JDE-V2] inferred num_ids={num_ids} "
         f"from {len(set(tids))} unique IDs, max_track_id={max(tids)}"
     )
     return int(num_ids)
@@ -65,7 +66,7 @@ class Exp(MyExp):
         self.num_classes = 1
         self.depth = 1.33
         self.width = 1.25
-        self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]
+        self.exp_name = "yolox_x_dancetrack_jde_v2_cost_plus_dynamic_k"
 
         # Requires the JDE converter output. Keep val/test normal for detector AP
         # and TrackEval compatibility; only train needs global identity labels.
@@ -92,37 +93,26 @@ class Exp(MyExp):
         )
 
         # JDE branch settings.
-        self.reid_dim = 128 
-        self.reid_weight = 1.0
+        self.reid_dim = 128
+        self.reid_weight = 0.25
         self.use_uncertainty = False
         self.label_id_index = 5
 
-        # Tracking settings aligned with the existing DanceTrack HybridSORT config.
-        self.use_byte = True
-        self.dataset = "dancetrack"
-        self.track_thresh = 0.6
-        self.inertia = 0.05
-        self.iou_thresh = 0.15
-        self.asso = "Height_Modulated_IoU"
-        self.TCM_first_step = True
-        self.TCM_byte_step = True
-        self.TCM_first_step_weight = 1.0
-        self.TCM_byte_step_weight = 1.0
+        # Dynamic-k ablation: COST + DYNAMIC-K.
+        # Fixed best V2 settings:
+        #   reid_dim = 128
+        #   reid_weight = 0.25
+        #   use_uncertainty = False
+        #   reid_match_weight = 0.10
+        #   reid_match_max_cost = 2.0
+        # This run sets use_reid_in_dynamic_k = True.
+        # ReID affects both SimOTA final cost and dynamic-k positive count.
 
-        # Use the detector's own JDE embeddings during tracking.
-        self.hybrid_sort_with_reid = True
-        self.with_jde_reid = True
-        self.with_fastreid = False
-        self.EG_weight_high_score = 4.0
-        self.EG_weight_low_score = 4.4
-        self.alpha = 0.8
-        self.with_longterm_reid = False
-        self.longterm_reid_weight = 0.0
-        self.longterm_reid_weight_low = 0.0
-        self.with_longterm_reid_correction = False
-        self.longterm_reid_correction_thresh = 1.0
-        self.longterm_reid_correction_thresh_low = 1.0
-
+        # V2 contribution: identity-aware SimOTA matching.
+        self.reid_match_weight = 0.10
+        self.reid_match_max_cost = 2.0
+        self.use_reid_in_dynamic_k = True
+        
     def get_model(self, sublinear=False):
         def init_yolo(M):
             for m in M.modules():
@@ -133,7 +123,7 @@ class Exp(MyExp):
         if "model" not in self.__dict__:
             from yolox.models.yolox import YOLOX
             from yolox.models.yolo_pafpn import YOLOPAFPN
-            from yolox.models.yolo_head_dense_reid_v1 import YOLOXHead
+            from yolox.models.yolo_head_dense_reid_v2 import YOLOXHead
 
             in_channels = [256, 512, 1024]
             backbone = YOLOPAFPN(self.depth, self.width, in_channels=in_channels, depthwise=False)
@@ -147,6 +137,9 @@ class Exp(MyExp):
                 reid_weight=self.reid_weight,
                 use_uncertainty=self.use_uncertainty,
                 label_id_index=self.label_id_index,
+                reid_match_weight=self.reid_match_weight,
+                reid_match_max_cost=self.reid_match_max_cost,
+                use_reid_in_dynamic_k=self.use_reid_in_dynamic_k,
             )
             self.model = YOLOX(backbone, head)
 

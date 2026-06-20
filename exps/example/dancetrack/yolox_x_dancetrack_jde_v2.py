@@ -97,9 +97,9 @@ class Exp(MyExp):
         self.label_id_index = 5
 
         # V2 contribution: identity-aware SimOTA matching.
-        self.reid_match_weight = 0.2
+        self.reid_match_weight = 0.3
         self.reid_match_max_cost = 2.0
-        self.use_reid_in_dynamic_k = True
+        self.use_reid_in_dynamic_k = False
 
         # Tracking settings aligned with the existing DanceTrack HybridSORT config.
         self.use_byte = True
