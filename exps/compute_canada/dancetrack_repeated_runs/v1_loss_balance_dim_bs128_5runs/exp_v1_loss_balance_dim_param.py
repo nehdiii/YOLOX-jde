@@ -65,7 +65,7 @@ class Exp(MyExp):
         self.num_classes = 1
         self.depth = 1.33
         self.width = 1.25
-        self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]
+        self.exp_name = os.environ.get("EXP_NAME", "yolox_x_dancetrack_jde_v1_loss_balance_dim_param")
 
         # Requires the JDE converter output. Keep val/test normal for detector AP
         # and TrackEval compatibility; only train needs global identity labels.
@@ -92,37 +92,19 @@ class Exp(MyExp):
         )
 
         # JDE branch settings.
-        self.reid_dim = 128 
+        self.reid_dim = int(os.environ.get("REID_DIM", "128"))
         self.reid_weight = 1.0
         self.use_uncertainty = True
         self.label_id_index = 5
+        # Repeated-run ablation: JDE V1 loss balancing with variable embedding dimension.
+        # Fixed settings:
+        #   reid_weight = 1.0
+        #   use_uncertainty = True
+        # Swept by Slurm array through REID_DIM:
+        #   reid_dim in {64, 128, 256, 512}
+        # Each dimension is trained 5 independent times.
 
-        # Tracking settings aligned with the existing DanceTrack HybridSORT config.
-        self.use_byte = True
-        self.dataset = "dancetrack"
-        self.track_thresh = 0.6
-        self.inertia = 0.05
-        self.iou_thresh = 0.15
-        self.asso = "Height_Modulated_IoU"
-        self.TCM_first_step = True
-        self.TCM_byte_step = True
-        self.TCM_first_step_weight = 1.0
-        self.TCM_byte_step_weight = 1.0
-
-        # Use the detector's own JDE embeddings during tracking.
-        self.hybrid_sort_with_reid = True
-        self.with_jde_reid = True
-        self.with_fastreid = False
-        self.EG_weight_high_score = 4.0
-        self.EG_weight_low_score = 4.4
-        self.alpha = 0.8
-        self.with_longterm_reid = False
-        self.longterm_reid_weight = 0.0
-        self.longterm_reid_weight_low = 0.0
-        self.with_longterm_reid_correction = False
-        self.longterm_reid_correction_thresh = 1.0
-        self.longterm_reid_correction_thresh_low = 1.0
-
+        
     def get_model(self, sublinear=False):
         def init_yolo(M):
             for m in M.modules():

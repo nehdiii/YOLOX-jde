@@ -1,0 +1,25 @@
+{
+    "experiment": "JDE V1 loss balancing dim ablation repeated runs",
+    "dims": [
+      64,
+      128,
+      256,
+      512
+    ],
+    "repeats_per_dim": 5,
+    "batch_size": 128,
+    "reid_weight": 1.0,
+    "use_uncertainty": true,
+    "array_mapping": {
+      "0-4": "dim64 trials 1-5",
+      "5-9": "dim128 trials 1-5",
+      "10-14": "dim256 trials 1-5",
+      "15-19": "dim512 trials 1-5"
+    },
+    "aggregate_folder_pattern": "YOLOX_outputs/yolox_x_dancetrack_jde_v1_lb_dim{DIM}_bs48_5runs/",
+    "saved_files_per_folder": [
+      "best_ckpt_1.pth.tar ... best_ckpt_5.pth.tar",
+      "train_log_1.txt ... train_log_5.txt"
+    ],
+    "temporary_training_folders": "deleted after successful collection"
+  }
