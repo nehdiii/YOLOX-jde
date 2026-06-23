@@ -50,7 +50,7 @@ python tools/convert_dance_to_coco_jde.py \
 
 CUDA_VISIBLE_DEVICES=0,1 python tools/run_hybrid_sort_dance_jde_parallel.py \
   -f exps/example/dancetrack/yolox_x_dancetrack_jde_v1.py \
-  -c YOLOX_outputs/JDE-V1/yolox_x_dancetrack_jde_v1_epoch025_dim128_lb_cc_2nodes_8gpu/best_ckpt.pth.tar \
+  -c YOLOX_outputs/JDE-V1/yolox_x_dancetrack_jde_v1_lb_dim512_bs48_5runs_tmp_trial4_14536661_18/best_ckpt.pth.tar \
   -b 1 -d 1 --fp16 --fuse \
   --expn yolox_x_dancetrack_jde_v1_val \
   --parallel-workers 10 \
