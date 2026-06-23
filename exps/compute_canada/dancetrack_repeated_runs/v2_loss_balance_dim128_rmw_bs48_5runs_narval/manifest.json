@@ -1,0 +1,261 @@
+{
+    "method": "JDE-V2",
+    "loss_balancing": true,
+    "reid_dim": 128,
+    "reid_weight": 1.0,
+    "reid_match_values": [
+      0.05,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      1.0
+    ],
+    "runs_per_value": 5,
+    "total_tasks": 30,
+    "batch_size": 48,
+    "array_mapping": [
+      {
+        "task_id": 0,
+        "reid_match_weight": 0.05,
+        "run_id": 1,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw005_bs48_5runs",
+        "checkpoint": "best_ckpt_1.pth.tar",
+        "log": "train_log_1.txt"
+      },
+      {
+        "task_id": 1,
+        "reid_match_weight": 0.05,
+        "run_id": 2,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw005_bs48_5runs",
+        "checkpoint": "best_ckpt_2.pth.tar",
+        "log": "train_log_2.txt"
+      },
+      {
+        "task_id": 2,
+        "reid_match_weight": 0.05,
+        "run_id": 3,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw005_bs48_5runs",
+        "checkpoint": "best_ckpt_3.pth.tar",
+        "log": "train_log_3.txt"
+      },
+      {
+        "task_id": 3,
+        "reid_match_weight": 0.05,
+        "run_id": 4,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw005_bs48_5runs",
+        "checkpoint": "best_ckpt_4.pth.tar",
+        "log": "train_log_4.txt"
+      },
+      {
+        "task_id": 4,
+        "reid_match_weight": 0.05,
+        "run_id": 5,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw005_bs48_5runs",
+        "checkpoint": "best_ckpt_5.pth.tar",
+        "log": "train_log_5.txt"
+      },
+      {
+        "task_id": 5,
+        "reid_match_weight": 0.1,
+        "run_id": 1,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_bs48_5runs",
+        "checkpoint": "best_ckpt_1.pth.tar",
+        "log": "train_log_1.txt"
+      },
+      {
+        "task_id": 6,
+        "reid_match_weight": 0.1,
+        "run_id": 2,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_bs48_5runs",
+        "checkpoint": "best_ckpt_2.pth.tar",
+        "log": "train_log_2.txt"
+      },
+      {
+        "task_id": 7,
+        "reid_match_weight": 0.1,
+        "run_id": 3,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_bs48_5runs",
+        "checkpoint": "best_ckpt_3.pth.tar",
+        "log": "train_log_3.txt"
+      },
+      {
+        "task_id": 8,
+        "reid_match_weight": 0.1,
+        "run_id": 4,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_bs48_5runs",
+        "checkpoint": "best_ckpt_4.pth.tar",
+        "log": "train_log_4.txt"
+      },
+      {
+        "task_id": 9,
+        "reid_match_weight": 0.1,
+        "run_id": 5,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_bs48_5runs",
+        "checkpoint": "best_ckpt_5.pth.tar",
+        "log": "train_log_5.txt"
+      },
+      {
+        "task_id": 10,
+        "reid_match_weight": 0.2,
+        "run_id": 1,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw020_bs48_5runs",
+        "checkpoint": "best_ckpt_1.pth.tar",
+        "log": "train_log_1.txt"
+      },
+      {
+        "task_id": 11,
+        "reid_match_weight": 0.2,
+        "run_id": 2,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw020_bs48_5runs",
+        "checkpoint": "best_ckpt_2.pth.tar",
+        "log": "train_log_2.txt"
+      },
+      {
+        "task_id": 12,
+        "reid_match_weight": 0.2,
+        "run_id": 3,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw020_bs48_5runs",
+        "checkpoint": "best_ckpt_3.pth.tar",
+        "log": "train_log_3.txt"
+      },
+      {
+        "task_id": 13,
+        "reid_match_weight": 0.2,
+        "run_id": 4,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw020_bs48_5runs",
+        "checkpoint": "best_ckpt_4.pth.tar",
+        "log": "train_log_4.txt"
+      },
+      {
+        "task_id": 14,
+        "reid_match_weight": 0.2,
+        "run_id": 5,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw020_bs48_5runs",
+        "checkpoint": "best_ckpt_5.pth.tar",
+        "log": "train_log_5.txt"
+      },
+      {
+        "task_id": 15,
+        "reid_match_weight": 0.3,
+        "run_id": 1,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw030_bs48_5runs",
+        "checkpoint": "best_ckpt_1.pth.tar",
+        "log": "train_log_1.txt"
+      },
+      {
+        "task_id": 16,
+        "reid_match_weight": 0.3,
+        "run_id": 2,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw030_bs48_5runs",
+        "checkpoint": "best_ckpt_2.pth.tar",
+        "log": "train_log_2.txt"
+      },
+      {
+        "task_id": 17,
+        "reid_match_weight": 0.3,
+        "run_id": 3,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw030_bs48_5runs",
+        "checkpoint": "best_ckpt_3.pth.tar",
+        "log": "train_log_3.txt"
+      },
+      {
+        "task_id": 18,
+        "reid_match_weight": 0.3,
+        "run_id": 4,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw030_bs48_5runs",
+        "checkpoint": "best_ckpt_4.pth.tar",
+        "log": "train_log_4.txt"
+      },
+      {
+        "task_id": 19,
+        "reid_match_weight": 0.3,
+        "run_id": 5,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw030_bs48_5runs",
+        "checkpoint": "best_ckpt_5.pth.tar",
+        "log": "train_log_5.txt"
+      },
+      {
+        "task_id": 20,
+        "reid_match_weight": 0.4,
+        "run_id": 1,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw040_bs48_5runs",
+        "checkpoint": "best_ckpt_1.pth.tar",
+        "log": "train_log_1.txt"
+      },
+      {
+        "task_id": 21,
+        "reid_match_weight": 0.4,
+        "run_id": 2,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw040_bs48_5runs",
+        "checkpoint": "best_ckpt_2.pth.tar",
+        "log": "train_log_2.txt"
+      },
+      {
+        "task_id": 22,
+        "reid_match_weight": 0.4,
+        "run_id": 3,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw040_bs48_5runs",
+        "checkpoint": "best_ckpt_3.pth.tar",
+        "log": "train_log_3.txt"
+      },
+      {
+        "task_id": 23,
+        "reid_match_weight": 0.4,
+        "run_id": 4,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw040_bs48_5runs",
+        "checkpoint": "best_ckpt_4.pth.tar",
+        "log": "train_log_4.txt"
+      },
+      {
+        "task_id": 24,
+        "reid_match_weight": 0.4,
+        "run_id": 5,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw040_bs48_5runs",
+        "checkpoint": "best_ckpt_5.pth.tar",
+        "log": "train_log_5.txt"
+      },
+      {
+        "task_id": 25,
+        "reid_match_weight": 1.0,
+        "run_id": 1,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw100_bs48_5runs",
+        "checkpoint": "best_ckpt_1.pth.tar",
+        "log": "train_log_1.txt"
+      },
+      {
+        "task_id": 26,
+        "reid_match_weight": 1.0,
+        "run_id": 2,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw100_bs48_5runs",
+        "checkpoint": "best_ckpt_2.pth.tar",
+        "log": "train_log_2.txt"
+      },
+      {
+        "task_id": 27,
+        "reid_match_weight": 1.0,
+        "run_id": 3,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw100_bs48_5runs",
+        "checkpoint": "best_ckpt_3.pth.tar",
+        "log": "train_log_3.txt"
+      },
+      {
+        "task_id": 28,
+        "reid_match_weight": 1.0,
+        "run_id": 4,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw100_bs48_5runs",
+        "checkpoint": "best_ckpt_4.pth.tar",
+        "log": "train_log_4.txt"
+      },
+      {
+        "task_id": 29,
+        "reid_match_weight": 1.0,
+        "run_id": 5,
+        "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw100_bs48_5runs",
+        "checkpoint": "best_ckpt_5.pth.tar",
+        "log": "train_log_5.txt"
+      }
+    ],
+    "cluster": "narval",
+    "gpu_request": "a100:4 per node, 2 nodes"
+  }

@@ -1,9 +1,11 @@
 # encoding: utf-8
-"""YOLOX-X DanceTrack JDE V2 tracking config.
+"""YOLOX-X DanceTrack JDE V2 training/tracking config.
 
-This config is for local tracking/evaluation after training the V2 JDE model.
-It uses the same DanceTrack/HybridSORT-JDE tracking settings as V1, but loads
-the V2 head where ReID is included inside SimOTA assignment.
+JDE V2 means:
+- dense JDE ReID branch is trained as in V1;
+- predicted embeddings are also used inside SimOTA assignment;
+- the matching cost becomes detection cost + lambda_id * identity cost;
+- dynamic-k can optionally use the identity-aware quality.
 """
 
 import json
@@ -64,7 +66,7 @@ class Exp(MyExp):
         self.num_classes = 1
         self.depth = 1.33
         self.width = 1.25
-        self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]
+        self.exp_name = os.environ.get("EXP_NAME", "yolox_x_dancetrack_jde_v2_lb_dim128_rmw_param")
 
         # Requires the JDE converter output. Keep val/test normal for detector AP
         # and TrackEval compatibility; only train needs global identity labels.
@@ -93,40 +95,19 @@ class Exp(MyExp):
         # JDE branch settings.
         self.reid_dim = 128
         self.reid_weight = 1.0
-        self.use_uncertainty = True 
+        self.use_uncertainty = True
         self.label_id_index = 5
 
+        # Repeated-run ablation: JDE-V2 loss balancing, dim=128, sweep reid_match_weight.
+        # Fixed: reid_dim=128, reid_weight=1.0, use_uncertainty=True.
+        # Fixed: reid_match_max_cost=2.0, use_reid_in_dynamic_k=True.
+        # Swept by env var REID_MATCH_WEIGHT: 0.05, 0.10, 0.20, 0.30, 0.40, 1.00.
+
         # V2 contribution: identity-aware SimOTA matching.
-        self.reid_match_weight = 0.05
+        self.reid_match_weight = float(os.environ.get("REID_MATCH_WEIGHT", "0.10"))
         self.reid_match_max_cost = 2.0
-        self.use_reid_in_dynamic_k = False
-
-        # Tracking settings aligned with the existing DanceTrack HybridSORT config.
-        self.use_byte = True
-        self.dataset = "dancetrack"
-        self.track_thresh = 0.6
-        self.inertia = 0.05
-        self.iou_thresh = 0.15
-        self.asso = "Height_Modulated_IoU"
-        self.TCM_first_step = True
-        self.TCM_byte_step = True
-        self.TCM_first_step_weight = 1.0
-        self.TCM_byte_step_weight = 1.0
-
-        # Use the detector's own JDE embeddings during tracking.
-        self.hybrid_sort_with_reid = True
-        self.with_jde_reid = True
-        self.with_fastreid = False
-        self.EG_weight_high_score = 4.0
-        self.EG_weight_low_score = 4.4
-        self.alpha = 0.8
-        self.with_longterm_reid = False
-        self.longterm_reid_weight = 0.0
-        self.longterm_reid_weight_low = 0.0
-        self.with_longterm_reid_correction = False
-        self.longterm_reid_correction_thresh = 1.0
-        self.longterm_reid_correction_thresh_low = 1.0
-
+        self.use_reid_in_dynamic_k = True
+        
     def get_model(self, sublinear=False):
         def init_yolo(M):
             for m in M.modules():
