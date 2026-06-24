@@ -50,23 +50,14 @@ python tools/convert_dance_to_coco_jde.py \
 
 CUDA_VISIBLE_DEVICES=0,1 python tools/run_hybrid_sort_dance_jde_parallel.py \
   -f exps/example/dancetrack/yolox_x_dancetrack_jde_v1.py \
-  -c YOLOX_outputs/JDE-V2/yolox_x_dancetrack_jde_v2_lb_dim128_rmw005_bs48_5runs_run1_tmp/best_ckpt.pth.tar \
+  -c YOLOX_outputs/JDE-V2/yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_bs48_5runs_run1_tmp/best_ckpt.pth.tar \
   -b 1 -d 1 --fp16 --fuse \
   --expn yolox_x_dancetrack_jde_v1_val \
-  --parallel-workers 10 \
+  --parallel-workers 5 \
   --parallel-gpus 0,1 \
   --parallel-clean-results \
   --parallel-progress-mode frames
 
-CUDA_VISIBLE_DEVICES=0,1 python tools/run_hybrid_sort_dance_jde_parallel.py \
-  -f exps/example/dancetrack/yolox_x_dancetrack_jde_v2.py \
-  -c YOLOX_outputs/JDE-V2/yolox_x_dancetrack_jde_v2_lb_dim128_rmw005_bs48_5runs_run2_tmp/best_ckpt.pth.tar \
-  -b 1 -d 1 --fp16 --fuse \
-  --expn yolox_x_dancetrack_jde_v1_val \
-  --parallel-workers 10 \
-  --parallel-gpus 0,1 \
-  --parallel-clean-results \
-  --parallel-progress-mode frames
 
 # test motion only for jde v1 
 

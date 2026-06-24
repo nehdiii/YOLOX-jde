@@ -11,9 +11,20 @@
 
 set -euo pipefail
 
-cd "$HOME/links/projects/YOLOX-jde"
+# The submit wrapper exports the repository's real path.  Falling back to
+# SLURM_SUBMIT_DIR also keeps direct `sbatch ...` submissions working, provided
+# they are made from the repository root.
+REPO_DIR="${REPO_DIR:-${SLURM_SUBMIT_DIR:-}}"
+if [ -z "$REPO_DIR" ] || [ ! -f "$REPO_DIR/tools/train.py" ]; then
+    echo "[ERROR] Could not find the HybridSORT repository."
+    echo "REPO_DIR=${REPO_DIR:-not_set}"
+    echo "Submit with the provided submit_smoke_v2_lb_dim128_rmw010_narval.sh wrapper,"
+    echo "or export REPO_DIR=/absolute/path/to/your/repository before sbatch."
+    exit 1
+fi
 
-export REPO_DIR="$HOME/links/projects/YOLOX-jde"
+export REPO_DIR
+cd "$REPO_DIR"
 export DATA_SOURCE="$REPO_DIR/datasets/data.zip"
 export SCRATCH_ROOT="$HOME/scratch/YOLOX-jde"
 export OUTPUT_ROOT="$SCRATCH_ROOT/YOLOX_outputs"
