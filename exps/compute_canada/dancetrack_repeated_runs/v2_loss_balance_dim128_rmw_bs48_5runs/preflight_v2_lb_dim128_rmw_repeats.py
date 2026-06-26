@@ -2,7 +2,7 @@
 import os
 from yolox.exp import get_exp
 EXP_FILE = "exps/compute_canada/dancetrack_repeated_runs/v2_loss_balance_dim128_rmw_bs48_5runs/exp_v2_lb_dim128_rmw_param.py"
-values = [0.05, 0.10, 0.20, 0.30, 0.40, 1.00]
+values = [0.05, 0.10, 0.20, 0.30, 0.40, 1.00, 1.20, 1.50, 2.00]
 for rmw in values:
     os.environ["REID_MATCH_WEIGHT"] = str(rmw)
     os.environ["EXP_NAME"] = f"preflight_v2_lb_dim128_rmw{int(round(rmw*100)):03d}"

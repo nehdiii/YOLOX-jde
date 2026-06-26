@@ -7,7 +7,7 @@
 #SBATCH --mem=0
 #SBATCH --time=01:30:00
 #SBATCH --job-name=dt_v2_lb_rmw5
-#SBATCH --array=0-29
+#SBATCH --array=0-44
 #SBATCH --output=logs_compute_canada/%x-%A_%a.out
 
 set -euo pipefail
@@ -18,8 +18,8 @@ export DATA_SOURCE="$REPO_DIR/datasets/data.zip"
 export SCRATCH_ROOT="$HOME/scratch/YOLOX-jde"
 export OUTPUT_ROOT="$SCRATCH_ROOT/YOLOX_outputs"
 
-RMW_VALUES=(0.05 0.10 0.20 0.30 0.40 1.00)
-RMW_NAMES=(005 010 020 030 040 100)
+RMW_VALUES=(0.05 0.10 0.20 0.30 0.40 1.00 1.20 1.50 2.00)
+RMW_NAMES=(005 010 020 030 040 100 120 150 200)
 RUNS_PER_RMW=5
 RMW_INDEX=$((SLURM_ARRAY_TASK_ID / RUNS_PER_RMW))
 RUN_ID=$((SLURM_ARRAY_TASK_ID % RUNS_PER_RMW + 1))

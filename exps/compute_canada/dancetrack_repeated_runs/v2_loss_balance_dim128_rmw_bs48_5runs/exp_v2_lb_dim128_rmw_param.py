@@ -101,7 +101,7 @@ class Exp(MyExp):
         # Repeated-run ablation: JDE-V2 loss balancing, dim=128, sweep reid_match_weight.
         # Fixed: reid_dim=128, reid_weight=1.0, use_uncertainty=True.
         # Fixed: reid_match_max_cost=2.0, use_reid_in_dynamic_k=True.
-        # Swept by env var REID_MATCH_WEIGHT: 0.05, 0.10, 0.20, 0.30, 0.40, 1.00.
+        # Swept by env var REID_MATCH_WEIGHT: 0.05, 0.10, 0.20, 0.30, 0.40, 1.00, 1.20, 1.50, 2.00.
 
         # V2 contribution: identity-aware SimOTA matching.
         self.reid_match_weight = float(os.environ.get("REID_MATCH_WEIGHT", "0.10"))
