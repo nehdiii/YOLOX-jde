@@ -106,7 +106,7 @@ class Exp(MyExp):
         # V2 contribution: identity-aware SimOTA matching.
         self.reid_match_weight = float(os.environ.get("REID_MATCH_WEIGHT", "0.10"))
         self.reid_match_max_cost = 2.0
-        self.use_reid_in_dynamic_k = True
+        self.use_reid_in_dynamic_k = False 
         
     def get_model(self, sublinear=False):
         def init_yolo(M):
