@@ -1,0 +1,57 @@
+{
+  "cluster": "narval",
+  "method": "JDE-V2",
+  "loss_balancing": true,
+  "reid_dim": 128,
+  "use_uncertainty": true,
+  "reid_weight": 1.0,
+  "reid_match_weight": 0.1,
+  "use_reid_in_dynamic_k": false,
+  "swept_parameter": "reid_match_max_cost",
+  "reid_match_max_cost_values": [
+    0.5,
+    1.0,
+    1.5,
+    2.5,
+    3.0,
+    3.5
+  ],
+  "runs_per_value": 5,
+  "total_tasks": 30,
+  "batch_size": 48,
+  "seed_formula": "32345 + SLURM_ARRAY_TASK_ID",
+  "scratch_root": "$HOME/scratch/YOLOX-jde",
+  "output_root": "$HOME/scratch/YOLOX-jde/YOLOX_outputs",
+  "array_ranges": [
+    {
+      "tasks": "0-4",
+      "reid_match_max_cost": 0.5,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc050_nody_bs48_5runs_narval"
+    },
+    {
+      "tasks": "5-9",
+      "reid_match_max_cost": 1.0,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc100_nody_bs48_5runs_narval"
+    },
+    {
+      "tasks": "10-14",
+      "reid_match_max_cost": 1.5,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc150_nody_bs48_5runs_narval"
+    },
+    {
+      "tasks": "15-19",
+      "reid_match_max_cost": 2.5,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc250_nody_bs48_5runs_narval"
+    },
+    {
+      "tasks": "20-24",
+      "reid_match_max_cost": 3.0,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc300_nody_bs48_5runs_narval"
+    },
+    {
+      "tasks": "25-29",
+      "reid_match_max_cost": 3.5,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc350_nody_bs48_5runs_narval"
+    }
+  ]
+}
