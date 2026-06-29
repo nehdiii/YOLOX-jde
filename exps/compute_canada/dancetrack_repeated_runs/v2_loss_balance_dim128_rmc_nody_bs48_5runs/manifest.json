@@ -1,0 +1,202 @@
+{
+  "method": "JDE-V2",
+  "loss_balancing": true,
+  "reid_dim": 128,
+  "use_uncertainty": true,
+  "reid_weight": 1.0,
+  "reid_match_weight": 0.1,
+  "use_reid_in_dynamic_k": false,
+  "swept_parameter": "reid_match_max_cost",
+  "reid_match_max_cost_values": [
+    0.5,
+    1.0,
+    1.5,
+    2.0
+  ],
+  "runs_per_value": 5,
+  "total_tasks": 20,
+  "batch_size": 48,
+  "seed_formula": "22345 + SLURM_ARRAY_TASK_ID",
+  "array_mapping": [
+    {
+      "task_id": 0,
+      "reid_match_max_cost": 0.5,
+      "run_id": 1,
+      "seed": 22345,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc050_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_1.pth.tar",
+      "log": "train_log_1.txt"
+    },
+    {
+      "task_id": 1,
+      "reid_match_max_cost": 0.5,
+      "run_id": 2,
+      "seed": 22346,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc050_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_2.pth.tar",
+      "log": "train_log_2.txt"
+    },
+    {
+      "task_id": 2,
+      "reid_match_max_cost": 0.5,
+      "run_id": 3,
+      "seed": 22347,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc050_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_3.pth.tar",
+      "log": "train_log_3.txt"
+    },
+    {
+      "task_id": 3,
+      "reid_match_max_cost": 0.5,
+      "run_id": 4,
+      "seed": 22348,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc050_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_4.pth.tar",
+      "log": "train_log_4.txt"
+    },
+    {
+      "task_id": 4,
+      "reid_match_max_cost": 0.5,
+      "run_id": 5,
+      "seed": 22349,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc050_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_5.pth.tar",
+      "log": "train_log_5.txt"
+    },
+    {
+      "task_id": 5,
+      "reid_match_max_cost": 1.0,
+      "run_id": 1,
+      "seed": 22350,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc100_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_1.pth.tar",
+      "log": "train_log_1.txt"
+    },
+    {
+      "task_id": 6,
+      "reid_match_max_cost": 1.0,
+      "run_id": 2,
+      "seed": 22351,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc100_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_2.pth.tar",
+      "log": "train_log_2.txt"
+    },
+    {
+      "task_id": 7,
+      "reid_match_max_cost": 1.0,
+      "run_id": 3,
+      "seed": 22352,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc100_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_3.pth.tar",
+      "log": "train_log_3.txt"
+    },
+    {
+      "task_id": 8,
+      "reid_match_max_cost": 1.0,
+      "run_id": 4,
+      "seed": 22353,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc100_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_4.pth.tar",
+      "log": "train_log_4.txt"
+    },
+    {
+      "task_id": 9,
+      "reid_match_max_cost": 1.0,
+      "run_id": 5,
+      "seed": 22354,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc100_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_5.pth.tar",
+      "log": "train_log_5.txt"
+    },
+    {
+      "task_id": 10,
+      "reid_match_max_cost": 1.5,
+      "run_id": 1,
+      "seed": 22355,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc150_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_1.pth.tar",
+      "log": "train_log_1.txt"
+    },
+    {
+      "task_id": 11,
+      "reid_match_max_cost": 1.5,
+      "run_id": 2,
+      "seed": 22356,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc150_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_2.pth.tar",
+      "log": "train_log_2.txt"
+    },
+    {
+      "task_id": 12,
+      "reid_match_max_cost": 1.5,
+      "run_id": 3,
+      "seed": 22357,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc150_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_3.pth.tar",
+      "log": "train_log_3.txt"
+    },
+    {
+      "task_id": 13,
+      "reid_match_max_cost": 1.5,
+      "run_id": 4,
+      "seed": 22358,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc150_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_4.pth.tar",
+      "log": "train_log_4.txt"
+    },
+    {
+      "task_id": 14,
+      "reid_match_max_cost": 1.5,
+      "run_id": 5,
+      "seed": 22359,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc150_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_5.pth.tar",
+      "log": "train_log_5.txt"
+    },
+    {
+      "task_id": 15,
+      "reid_match_max_cost": 2.0,
+      "run_id": 1,
+      "seed": 22360,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc200_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_1.pth.tar",
+      "log": "train_log_1.txt"
+    },
+    {
+      "task_id": 16,
+      "reid_match_max_cost": 2.0,
+      "run_id": 2,
+      "seed": 22361,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc200_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_2.pth.tar",
+      "log": "train_log_2.txt"
+    },
+    {
+      "task_id": 17,
+      "reid_match_max_cost": 2.0,
+      "run_id": 3,
+      "seed": 22362,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc200_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_3.pth.tar",
+      "log": "train_log_3.txt"
+    },
+    {
+      "task_id": 18,
+      "reid_match_max_cost": 2.0,
+      "run_id": 4,
+      "seed": 22363,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc200_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_4.pth.tar",
+      "log": "train_log_4.txt"
+    },
+    {
+      "task_id": 19,
+      "reid_match_max_cost": 2.0,
+      "run_id": 5,
+      "seed": 22364,
+      "final_folder": "yolox_x_dancetrack_jde_v2_lb_dim128_rmw010_rmc200_nody_bs48_5runs",
+      "checkpoint": "best_ckpt_5.pth.tar",
+      "log": "train_log_5.txt"
+    }
+  ]
+}
