@@ -15,7 +15,7 @@ cd "$HOME/links/projects/YOLOX-jde"
 
 export REPO_DIR="$HOME/links/projects/YOLOX-jde"
 export DATA_SOURCE="$REPO_DIR/datasets/data.zip"
-export SCRATCH_ROOT="$HOME/scratch/YOLOX-jde"
+export SCRATCH_ROOT="$HOME/links/scratch/YOLOX-jde"
 export OUTPUT_ROOT="$SCRATCH_ROOT/YOLOX_outputs"
 
 RMC_VALUES=(0.5 1.0 1.5 2.5 3.0 3.5)
