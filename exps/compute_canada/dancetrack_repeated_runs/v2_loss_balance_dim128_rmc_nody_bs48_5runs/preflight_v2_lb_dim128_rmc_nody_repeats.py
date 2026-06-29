@@ -5,7 +5,7 @@ from yolox.exp import get_exp
 
 
 EXP_FILE = "exps/compute_canada/dancetrack_repeated_runs/v2_loss_balance_dim128_rmc_nody_bs48_5runs/exp_v2_lb_dim128_rmc_nody_param.py"
-values = [0.5, 1.0, 1.5, 2.0]
+values = [0.5, 1.0, 1.5, 2.5, 3.0, 3.5]
 
 for rmc in values:
     os.environ["REID_MATCH_MAX_COST"] = str(rmc)

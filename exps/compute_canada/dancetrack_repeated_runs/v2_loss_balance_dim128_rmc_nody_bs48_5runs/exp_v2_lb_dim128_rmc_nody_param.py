@@ -4,7 +4,7 @@
 This bundle reuses the JDE-V2 DanceTrack repeated-run config and only changes
 the matching hyperparameters under study:
 
-- swept by REID_MATCH_MAX_COST: 0.5, 1.0, 1.5, 2.0
+- swept by REID_MATCH_MAX_COST: 0.5, 1.0, 1.5, 2.5, 3.0, 3.5
 - fixed reid_dim=128
 - fixed reid_weight=1.0
 - fixed use_uncertainty=True
