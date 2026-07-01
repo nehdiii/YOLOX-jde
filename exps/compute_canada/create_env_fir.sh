@@ -327,7 +327,7 @@ export MAX_JOBS="${MAX_JOBS:-4}"
 python -m pip install -e . --no-build-isolation --no-deps
 
 echo "==> Writing activation helper"
-cat > "$REPO_DIR/exps/compute_canada/activate_track_h100.sh" <<SH
+cat > "$REPO_DIR/exps/compute_canada/activate_track_fir.sh" <<SH
 #!/bin/bash
 module --force purge
 module load StdEnv/2023
@@ -340,7 +340,7 @@ source "$ENV_DIR/bin/activate"
 export PYTHONPATH="$REPO_DIR:\${PYTHONPATH:-}"
 SH
 
-chmod +x "$REPO_DIR/exps/compute_canada/activate_track_h100.sh"
+chmod +x "$REPO_DIR/exps/compute_canada/activate_track_fir.sh"
 
 echo "==> Final verification"
 python - <<'PY'
@@ -400,8 +400,8 @@ echo "============================================================"
 echo "Environment created successfully."
 echo
 echo "To activate manually:"
-echo "  source $REPO_DIR/exps/compute_canada/activate_track_h100.sh"
+echo "  source $REPO_DIR/exps/compute_canada/activate_track_fir.sh"
 echo
-echo "To submit detector training:"
-echo "  sbatch $REPO_DIR/exps/compute_canada/train_dancetrack_detector_x_1gpu_rorqual.slurm"
+echo "Fir repeated-run Slurm scripts use:"
+echo "  ACTIVATE_SCRIPT=$REPO_DIR/exps/compute_canada/activate_track_fir.sh"
 echo "============================================================"
